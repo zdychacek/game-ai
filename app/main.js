@@ -1,4 +1,4 @@
-import Game from './game';
+import Game from './Game';
 
 var game = new Game(800, 600);
 

@@ -1,5 +1,5 @@
 import { EPSILON } from './constants';
-import utils from './utils';
+import Utils from './Utils';
 
 class Vector2D {
   constructor (a, b) {
@@ -122,7 +122,7 @@ class Vector2D {
   }
 
   isEqual (rhs) {
-    return utils.isEqual(this.x, rhs.x) && utils.isEqual(this.y, rhs.y);
+    return Utils.isEqual(this.x, rhs.x) && Utils.isEqual(this.y, rhs.y);
   }
 
   notEqual (rhs) {
@@ -245,6 +245,16 @@ class Vector2D {
     var toTarget = this.vec2DNormalize(this.sub(posSecond, posFirst));
 
     return facingFirst.dot(toTarget) >= Math.cos(fov / 2.0);
+  }
+
+  static cloneVectors (vectors) {
+    var arr = [];
+
+    for (var v of vectors) {
+      arr.push(new Vector2D(v));
+    }
+
+    return arr;
   }
 }
 

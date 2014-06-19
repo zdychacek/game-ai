@@ -1,4 +1,5 @@
 import Vector2D from './common/Vector2D';
+import Transformation from './common/Transformation';
 
 class Game {
   constructor (width, height) {
@@ -32,7 +33,6 @@ class Game {
   render (ctx) {
     this._resetContext(ctx, this._canvas);
 
-    ctx.fillRect(this._x, this._y, 150, 100);
   }
 
   update (dt) {
