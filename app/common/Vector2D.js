@@ -32,11 +32,11 @@ class Vector2D {
   }
 
   get length () {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.sqrt(this.lengthSq);
   }
 
-  lengthSq () {
-    return (this.x * this.x + this.y * this.y);
+  get lengthSq () {
+    return this.x * this.x + this.y * this.y;
   }
 
   normalize () {
@@ -61,7 +61,7 @@ class Vector2D {
     }
   }
 
-  perp () {
+  get perp () {
     return new Vector2D(-this.y, this.x);
   }
 
