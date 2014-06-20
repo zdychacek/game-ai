@@ -8,6 +8,10 @@ class Utils {
 
     return false;
   }
+
+  static getTime () {
+    return +new Date;
+  }
 }
 
 export default Utils;
