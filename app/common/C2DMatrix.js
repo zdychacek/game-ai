@@ -1,14 +1,14 @@
 class Matrix {
   constructor () {
-    this._11 = 0.0;
-    this._12 = 0.0;
-    this._13 = 0.0;
-    this._21 = 0.0;
-    this._22 = 0.0;
-    this._23 = 0.0;
-    this._31 = 0.0;
-    this._32 = 0.0;
-    this._33 = 0.0;
+    this._11 = 0;
+    this._12 = 0;
+    this._13 = 0;
+    this._21 = 0;
+    this._22 = 0;
+    this._23 = 0;
+    this._31 = 0;
+    this._32 = 0;
+    this._33 = 0;
   }
 }
 
@@ -130,22 +130,22 @@ class C2DMatrix {
   rotate (rot) {
     var mat = new Matrix();
 
-    var sin = Math.sin(rot);
-    var cos = Math.cos(rot);
+    if (arguments.length == 2) {
+      var vFwd = arguments[0];
+      var vSide = arguments[1];
 
-    mat._11 = cos;  mat._12 = sin; mat._13 = 0;
-    mat._21 = -sin; mat._22 = cos; mat._23 = 0;
-    mat._31 = 0;    mat._32 = 0;   mat._33 = 1;
+      mat._11 = vFwd.x;  mat._12 = vFwd.y;  mat._13 = 0;
+      mat._21 = vSide.x; mat._22 = vSide.y; mat._23 = 0;
+      mat._31 = 0;       mat._32 = 0;       mat._33 = 1;
+    }
+    else {
+      var sin = Math.sin(rot);
+      var cos = Math.cos(rot);
 
-    this.matrixMultiply(mat);
-  }
-
-  rotateByVectors (vFwd, vSide) {
-    var mat = new Matrix();
-
-    mat._11 = vFwd.x;  mat._12 = vFwd.y;  mat._13 = 0;
-    mat._21 = vSide.x; mat._22 = vSide.y; mat._23 = 0;
-    mat._31 = 0;       mat._32 = 0;       mat._33 = 1;
+      mat._11 = cos;  mat._12 = sin; mat._13 = 0;
+      mat._21 = -sin; mat._22 = cos; mat._23 = 0;
+      mat._31 = 0;    mat._32 = 0;   mat._33 = 1;
+    }
 
     this.matrixMultiply(mat);
   }

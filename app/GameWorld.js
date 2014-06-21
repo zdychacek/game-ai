@@ -1,34 +1,27 @@
 import { MouseButtons, Keys } from './common/constants';
 import Vector2D from './common/Vector2D';
 import InvertedAABBox2D from './common/InvertedAABBox2D';
-import MovingEntity from './MovingEntity';
+import Vehicle from './Vehicle';
 
 class GameWorld {
   /**
    * .ctor
    */
-  constructor (game, input) {
+  constructor (game) {
     // reference to Game app
     this._owner = game;
 
-    // input module
-    this._input = input;
-
-    this._box1 = new InvertedAABBox2D(new Vector2D(50, 50), new Vector2D(150, 150));
-    this._box2 = new InvertedAABBox2D(new Vector2D(85, 85), new Vector2D(300, 350));
-
-    this._vehicle = new MovingEntity({
-      vPosition: new Vector2D(100, 100),
-      radius: 15,
+    this._vehicle = new Vehicle({
+      vPosition: new Vector2D(this.cxClient / 2, this.cyClient / 2),
       vVelocity: new Vector2D(0, 0),
-      maxSpeed: 10,
-      vHeading: new Vector2D(1, 1),
-      mass: 70,
-      turnRate: Math.PI / 6,
-      maxForce: 700
+      world: this,
+      rotation: 2 * Math.PI / 3,
+      mass: 1,
+      maxForce: 700,
+      maxSpeed: 150,
+      maxTurnRate: Math.PI / 6,
+      scale: 20
     });
-
-    console.log(this._vehicle);
   }
 
   handleKeyPresses (key, pressed, event) {
@@ -47,16 +40,26 @@ class GameWorld {
   }
 
   handleMouseMove (x, y, event) {
-    //console.log(`Mouse at ${x}, ${y}.`);
+    var newHeading = Vector2D.sub(new Vector2D(x, y), this._vehicle.pos);
+    newHeading.normalize();
+
+    this._vehicle.heading = newHeading;
   }
 
   render (ctx) {
-    this._box1.render(ctx, true);
-    this._box2.render(ctx, true);
+    this._vehicle.render(ctx);
   }
 
   update (dt) {
+    this._vehicle.update(dt);
+  }
 
+  get cxClient () {
+    return this._owner.width;
+  }
+
+  get cyClient () {
+    return this._owner.height;
   }
 }
 

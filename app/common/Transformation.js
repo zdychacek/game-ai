@@ -6,7 +6,7 @@ class Transformation {
  * Given an array of 2D vectors, a position, orientation and scale,
  * this function transforms the 2D vectors into the object's world space.
  */
-  static worldTransfrom (points, vPos, vForward, vSide, vScale) {
+  static worldTransform (points, vPos, vForward, vSide, vScale) {
     // copy the original vertices into the buffer about to be transformed
     var points = Vector2D.cloneVectors(points);
 
@@ -14,36 +14,9 @@ class Transformation {
     var matTransform = new C2DMatrix();
 
     // scale
-    if ((vScale.x != 1.0) || (vScale.y != 1.0)) {
+    if (vScale && (vScale.x != 1 || vScale.y != 1)) {
         matTransform.scale(vScale.x, vScale.y);
     }
-
-    // rotate
-    matTransform.rotate(vForward, vSide);
-
-    // and translate
-    matTransform.translate(vPos.x, vPos.y);
-
-    // now transform the object's vertices
-    matTransform.transformVector2Ds(points);
-
-    return points;
-  }
-
-  /**
-   *  Given an array of 2D vectors, a position and orientation,
-   *  this function transforms the 2D vectors into the object's world space.
-   */
-  static worldTransform (points, vPos, vForward, vSide) {
-    // copy the original vertices into the buffer about to be transformed
-    var points = Vector2D.cloneVectors(points);
-
-    for (var v of points) {
-        points.push(v);
-    }
-
-    // create a transformation matrix
-    var matTransform = new C2DMatrix();
 
     // rotate
     matTransform.rotate(vForward, vSide);

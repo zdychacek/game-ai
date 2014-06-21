@@ -17,7 +17,7 @@ class MovingEntity extends BaseGameEntity {
     vHeading,
     mass,
     vScale = new Vector2D(1, 1),
-    turnRate,
+    maxTurnRate,
     maxForce
   }) {
     super({
@@ -32,7 +32,7 @@ class MovingEntity extends BaseGameEntity {
     this._vScale = new Vector2D(vScale);
     this._mass = mass;
     this._maxSpeed = maxSpeed;
-    this._maxTurnRate = turnRate;
+    this._maxTurnRate = maxTurnRate;
     this._maxForce = maxForce;
   }
 
@@ -84,7 +84,7 @@ class MovingEntity extends BaseGameEntity {
     return this._vHeading;
   }
 
-  set setHeading (vNewHeading) {
+  set heading (vNewHeading) {
     assert((vNewHeading.lengthSq - 1) < 0.00001);
 
     this._vHeading = vNewHeading;

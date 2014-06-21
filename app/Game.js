@@ -13,7 +13,10 @@ class Game {
     this._width = w;
     this._height = h;
 
+    // create front and back buffer
     this.initBuffers(w, h);
+
+    // initialize input handling
     this.initInput(document, this._frontBuffer);
 
     // time of last update
@@ -23,7 +26,7 @@ class Game {
     this._fps = 0;
 
     // game world
-    this._gameWorld = new GameWorld(this, this._input);
+    this._gameWorld = new GameWorld(this);
   }
 
   initBuffers (w, h) {
@@ -135,11 +138,11 @@ class Game {
    */
   run () {
     var now = Utils.getTime();
-    // calculate delta time in seconds
-    var dt = Math.min(1, (now - this._lastUpdate) / 1000);
+    // calculate delta time
+    var dt = now - this._lastUpdate;
 
     // calculate FPS
-    this._fps = 1000 / (now - this._lastUpdate);
+    this._fps = 1000 / dt;
 
     // update game
     this.update(dt);
