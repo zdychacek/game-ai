@@ -1,5 +1,4 @@
 import Utils from './common/Utils';
-import { GameInput } from './GameInput';
 import GameWorld from './GameWorld';
 
 /**
@@ -14,7 +13,8 @@ class Game {
     this._width = w;
     this._height = h;
 
-    this._initBuffers(w, h);
+    this.initBuffers(w, h);
+    this.initInput(document, this._frontBuffer);
 
     // time of last update
     this._lastUpdate = Utils.getTime()
@@ -22,28 +22,60 @@ class Game {
     // FPS counter
     this._fps = 0;
 
-    // input module
-    this._input = new GameInput(window);
-
     // game world
     this._gameWorld = new GameWorld(this, this._input);
   }
 
-  _initBuffers (w, h) {
+  initBuffers (w, h) {
     // create front buffer
-    this._frontBuffer = this._createCanvas(w, h);
+    this._frontBuffer = this.createCanvas(w, h);
     this._frontCtx = this._frontBuffer.getContext('2d');
     document.body.appendChild(this._frontBuffer);
 
     // create back buffer
-    this._backBuffer = this._createCanvas(w, h);
+    this._backBuffer = this.createCanvas(w, h);
     this._backCtx = this._backBuffer.getContext('2d');
+  }
+
+  initInput (document, canvas) {
+    // keyboard handling
+    document.addEventListener('keydown', (event) => {
+      this.handleKeyPresses(event.keyCode, true, event);
+    }, false);
+
+    document.addEventListener('keyup', (event) => {
+      this.handleKeyPresses(event.keyCode, false, event);
+    }, false);
+
+    // mouse handling
+    var _handleClick = (event) => {
+      var x = event.layerX - canvas.offsetLeft;
+      var y = event.layerY - canvas.offsetTop;
+
+      this.handleMouseClick(x, y, event.which, event);
+    };
+
+    canvas.addEventListener('click', _handleClick, false);
+
+    canvas.addEventListener('contextmenu', (event) => {
+      _handleClick(event);
+
+      // must prevent context menu show
+      event.preventDefault();
+    });
+
+    canvas.addEventListener('mousemove', (event) => {
+      var x = event.layerX - canvas.offsetLeft;
+      var y = event.layerY - canvas.offsetTop;
+
+      this.handleMouseMove(x, y, event);
+    });
   }
 
   /**
    * Helper method for creating canvas.
    */
-  _createCanvas (width, height) {
+  createCanvas (width, height) {
     var canvas = document.createElement('canvas');
 
     canvas.width = width;
@@ -118,6 +150,18 @@ class Game {
 
     // register for next update step
     window.requestAnimationFrame(this.run.bind(this));
+  }
+
+  handleKeyPresses (key, pressed, event) {
+    this._gameWorld.handleKeyPresses(...arguments);
+  }
+
+  handleMouseClick (x, y, button, event) {
+    this._gameWorld.handleMouseClick(...arguments);
+  }
+
+  handleMouseMove (x, y, event) {
+    this._gameWorld.handleMouseMove(...arguments);
   }
 
   /**

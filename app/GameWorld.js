@@ -1,9 +1,12 @@
+import { MouseButtons, Keys } from './common/constants';
 import Vector2D from './common/Vector2D';
 import InvertedAABBox2D from './common/InvertedAABBox2D';
-import { Keys } from './GameInput';
 import MovingEntity from './MovingEntity';
 
 class GameWorld {
+  /**
+   * .ctor
+   */
   constructor (game, input) {
     // reference to Game app
     this._owner = game;
@@ -28,15 +31,32 @@ class GameWorld {
     console.log(this._vehicle);
   }
 
+  handleKeyPresses (key, pressed, event) {
+    if (key == Keys.Left && pressed) {
+      console.log('Left key was pressed.');
+    }
+  }
+
+  handleMouseClick (x, y, button, event) {
+    if (button == MouseButtons.Left) {
+      console.log(`Left click at ${x}, ${y}.`);
+    }
+    else if (button == MouseButtons.Right) {
+      console.log(`Right click at ${x}, ${y}.`);
+    }
+  }
+
+  handleMouseMove (x, y, event) {
+    //console.log(`Mouse at ${x}, ${y}.`);
+  }
+
   render (ctx) {
     this._box1.render(ctx, true);
     this._box2.render(ctx, true);
   }
 
   update (dt) {
-    if (this._input.isPressed(Keys.Left)) {
-      console.log('Pressed...');
-    }
+
   }
 }
 

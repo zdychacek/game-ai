@@ -60,7 +60,7 @@ gulp.task('serve', function() {
 
 gulp.task('clean', function() {
   gulp.src(distFolder, {read: false})
-    .pipe(clean());
+    .pipe(clean({ force: true }));
 });
 
 gulp.task('watch', function() {
