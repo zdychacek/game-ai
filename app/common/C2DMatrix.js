@@ -71,22 +71,21 @@ class C2DMatrix {
   // multiply two matrices together
   matrixMultiply (mIn) {
     var matTemp = new Matrix();
-    var matThis = this._matrix;
 
     //first row
-    matTemp._11 = (matThis._11 * mIn._11) + (matThis._12 * mIn._21) + (matThis._13 * mIn._31);
-    matTemp._12 = (matThis._11 * mIn._12) + (matThis._12 * mIn._22) + (matThis._13 * mIn._32);
-    matTemp._13 = (matThis._11 * mIn._13) + (matThis._12 * mIn._23) + (matThis._13 * mIn._33);
+    matTemp._11 = (this._matrix._11 * mIn._11) + (this._matrix._12 * mIn._21) + (this._matrix._13 * mIn._31);
+    matTemp._12 = (this._matrix._11 * mIn._12) + (this._matrix._12 * mIn._22) + (this._matrix._13 * mIn._32);
+    matTemp._13 = (this._matrix._11 * mIn._13) + (this._matrix._12 * mIn._23) + (this._matrix._13 * mIn._33);
 
     //second
-    matTemp._21 = (matThis._21 * mIn._11) + (matThis._22 * mIn._21) + (matThis._23 * mIn._31);
-    matTemp._22 = (matThis._21 * mIn._12) + (matThis._22 * mIn._22) + (matThis._23 * mIn._32);
-    matTemp._23 = (matThis._21 * mIn._13) + (matThis._22 * mIn._23) + (matThis._23 * mIn._33);
+    matTemp._21 = (this._matrix._21 * mIn._11) + (this._matrix._22 * mIn._21) + (this._matrix._23 * mIn._31);
+    matTemp._22 = (this._matrix._21 * mIn._12) + (this._matrix._22 * mIn._22) + (this._matrix._23 * mIn._32);
+    matTemp._23 = (this._matrix._21 * mIn._13) + (this._matrix._22 * mIn._23) + (this._matrix._23 * mIn._33);
 
     //third
-    matTemp._31 = (matThis._31 * mIn._11) + (matThis._32 * mIn._21) + (matThis._33 * mIn._31);
-    matTemp._32 = (matThis._31 * mIn._12) + (matThis._32 * mIn._22) + (matThis._33 * mIn._32);
-    matTemp._33 = (matThis._31 * mIn._13) + (matThis._32 * mIn._23) + (matThis._33 * mIn._33);
+    matTemp._31 = (this._matrix._31 * mIn._11) + (this._matrix._32 * mIn._21) + (this._matrix._33 * mIn._31);
+    matTemp._32 = (this._matrix._31 * mIn._12) + (this._matrix._32 * mIn._22) + (this._matrix._33 * mIn._32);
+    matTemp._33 = (this._matrix._31 * mIn._13) + (this._matrix._32 * mIn._23) + (this._matrix._33 * mIn._33);
 
     this._matrix = matTemp;
   }
@@ -100,6 +99,10 @@ class C2DMatrix {
   transformVector2D (vPoint) {
     var tempX = (this._matrix._11 * vPoint.x) + (this._matrix._21 * vPoint.y) + (this._matrix._31);
     var tempY = (this._matrix._12 * vPoint.x) + (this._matrix._22 * vPoint.y) + (this._matrix._32);
+
+    if (Object.is(tempX, NaN) || Object.is(tempY, NaN)) {
+      //debugger;
+    }
 
     vPoint.x = tempX;
     vPoint.y = tempY;
@@ -145,6 +148,7 @@ class C2DMatrix {
       mat._11 = cos;  mat._12 = sin; mat._13 = 0;
       mat._21 = -sin; mat._22 = cos; mat._23 = 0;
       mat._31 = 0;    mat._32 = 0;   mat._33 = 1;
+
     }
 
     this.matrixMultiply(mat);

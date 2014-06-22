@@ -20,7 +20,7 @@ class Game {
     this.initInput(document, this._frontBuffer);
 
     // time of last update
-    this._lastUpdate = Utils.getTime()
+    this._lastUpdate = Utils.getTime();
 
     // FPS counter
     this._fps = 0;
@@ -138,11 +138,13 @@ class Game {
    */
   run () {
     var now = Utils.getTime();
-    // calculate delta time
-    var dt = now - this._lastUpdate;
+    // delta in milliseconds
+    var dMs = now - this._lastUpdate;
+    // calculate delta time in seconds
+    var dt = dMs / 1000;
 
     // calculate FPS
-    this._fps = 1000 / dt;
+    this._fps = 1000 / dMs;
 
     // update game
     this.update(dt);

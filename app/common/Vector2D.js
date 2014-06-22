@@ -27,7 +27,7 @@ class Vector2D {
     this.y = 0;
   }
 
-  isZero () {
+  get isZero () {
     return (this.x * this.x + this.y * this.y) < Number.MIN_VALUE;
   }
 

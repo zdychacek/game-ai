@@ -22,6 +22,7 @@ class Vehicle extends MovingEntity {
     maxTurnRate,
     scale
   }) {
+    // call super
     super({
       vPosition,
       vVelocity,
@@ -34,21 +35,27 @@ class Vehicle extends MovingEntity {
       maxForce
     });
 
+
     // a pointer to the world data. So a vehicle can access any obstacle, path, wall or agent data
     this._world = world;
+
     // this vector represents the average of the vehicle's heading vector smoothed over the last few frames
     this._vSmoothedHeading = new Vector2D(0, 0);
+
     // when true, smoothing is active
     this._smoothingOn = false;
+
     // keeps a track of the most recent update time (some of the steering behaviors make use of this - see Wander)
     this._timeElapsed = 0;
-    // buffer for the vehicle shape
-    this._vecVehicleVB = [];
 
-    this._initializeBuffer();
+    // buffer for the vehicle shape
+    this._vehicleShape = [];
 
     // set up the steering behavior class
     this._steering = new SteeringBehavior(this);
+
+    // create vehicle shape
+    this._createVehicleShape();
 
     // set up the smoother
     //this._headingSmoother = new SmootherV2(Prm.NumSamplesForSmoothing, new Vector2D(0, 0));
@@ -57,19 +64,14 @@ class Vehicle extends MovingEntity {
   /**
    * Creates vehicle shape.
    */
-  _initializeBuffer () {
-    const numVehicleVerts = 3;
-
+  _createVehicleShape () {
     var vehicle = [
       new Vector2D(-1, 0.6),
       new Vector2D(1, 0),
       new Vector2D(-1, -0.6)
     ];
 
-    // setup the vertex buffers and calculate the bounding radius
-    for (var vtx = 0; vtx < numVehicleVerts; vtx++) {
-      this._vecVehicleVB.push(vehicle[vtx]);
-    }
+    this._vehicleShape = vehicle;
   }
 
   update (dt) {
@@ -103,7 +105,7 @@ class Vehicle extends MovingEntity {
     // EnforceNonPenetrationConstraint(this, World()->Agents());
 
     // treat the screen as a toroid
-    Vector2D.wrapAround(this._vPosition, this._world.cxClient, this._world.cyClient);
+    Vector2D.wrapAround(this._vPosition, this._world.winWidth, this._world.winHeight);
 
     /**update the vehicle's current cell if space partitioning is turned on
     if (Steering().isSpacePartitioningOn()) {
@@ -117,9 +119,9 @@ class Vehicle extends MovingEntity {
 
   render (ctx) {
     // trasnform local space to world space
-    var vecVehicleVBTrans =
+    var vecVehicleShapeTrans =
       Transformation.worldTransform(
-        this._vecVehicleVB,
+        this._vehicleShape,
         this.pos,
         this.heading,
         this.side,
@@ -127,7 +129,39 @@ class Vehicle extends MovingEntity {
       );
 
     // render vehicle shape
-    GDI.closedShape(ctx, vecVehicleVBTrans);
+    GDI.closedShape(ctx, vecVehicleShapeTrans);
+  }
+
+  get steering () {
+    return this._steering;
+  }
+
+  get world () {
+    return this._world;
+  }
+
+  get smoothedHeading () {
+    return new Vector2D(this._vSmoothedHeading);
+  }
+
+  get isSmoothingOn () {
+    return this._smoothingOn;
+  }
+
+  setSmoothingOn () {
+    this._smoothingOn = true;
+  }
+
+  setSmoothingOff () {
+    this._smoothingOn = false;
+  }
+
+  toggleSmoothing () {
+    this._smoothingOn = !this._smoothingOn;
+  }
+
+  get timeElapsed () {
+    return this._timeElapsed;
   }
 }
 

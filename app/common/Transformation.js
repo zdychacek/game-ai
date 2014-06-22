@@ -35,7 +35,7 @@ class Transformation {
    */
   static pointToWorldSpace (vPoint, vAgentHeading, vAgentSide, vAgentPosition) {
     // make a copy of the point
-    var transPoint = new Vector2D(point);
+    var transPoint = new Vector2D(vPoint);
 
     // create a transformation matrix
     var matTransform = new C2DMatrix();
@@ -47,7 +47,7 @@ class Transformation {
     matTransform.translate(vAgentPosition.x, vAgentPosition.y);
 
     // now transform the vertices
-    matTransform.transformVector2Ds(transPoint);
+    matTransform.transformVector2D(transPoint);
 
     return transPoint;
   }

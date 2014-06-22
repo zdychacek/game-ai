@@ -1,7 +1,9 @@
 import { MouseButtons, Keys } from './common/constants';
 import Vector2D from './common/Vector2D';
 import InvertedAABBox2D from './common/InvertedAABBox2D';
+import Utils from './common/Utils';
 import Vehicle from './Vehicle';
+import Params from './Params';
 
 class GameWorld {
   /**
@@ -9,19 +11,27 @@ class GameWorld {
    */
   constructor (game) {
     // reference to Game app
-    this._owner = game;
+    this._game = game;
+
+    this._walls = [];
+
+    this._obstacles = [];
+
+    this._agents = [];
 
     this._vehicle = new Vehicle({
-      vPosition: new Vector2D(this.cxClient / 2, this.cyClient / 2),
+      vPosition: new Vector2D(this.winWidth / 2, this.winHeight / 2),
       vVelocity: new Vector2D(0, 0),
       world: this,
-      rotation: 2 * Math.PI / 3,
-      mass: 1,
-      maxForce: 700,
-      maxSpeed: 150,
-      maxTurnRate: Math.PI / 6,
-      scale: 20
+      rotation: Utils.randFloat() * Math.PI * 2,
+      mass: Params.vehicleMass,
+      maxForce: 400,
+      maxSpeed: Params.maxSpeed,
+      maxTurnRate: Params.maxTurnRatePerSecond,
+      scale: Params.vehicleScale
     });
+
+    this._vehicle.steering.wanderOn();
   }
 
   handleKeyPresses (key, pressed, event) {
@@ -40,10 +50,14 @@ class GameWorld {
   }
 
   handleMouseMove (x, y, event) {
-    var newHeading = Vector2D.sub(new Vector2D(x, y), this._vehicle.pos);
+    /*var newHeading = Vector2D.sub(new Vector2D(x, y), this._vehicle.pos);
     newHeading.normalize();
 
-    this._vehicle.heading = newHeading;
+    this._vehicle.heading = newHeading;*/
+  }
+
+  tagVehiclesWithinViewRange (vehicle, distance) {
+    // TODO:
   }
 
   render (ctx) {
@@ -54,12 +68,24 @@ class GameWorld {
     this._vehicle.update(dt);
   }
 
-  get cxClient () {
-    return this._owner.width;
+  get winWidth () {
+    return this._game.width;
   }
 
-  get cyClient () {
-    return this._owner.height;
+  get winHeight () {
+    return this._game.height;
+  }
+
+  get walls () {
+    return this._walls;
+  }
+
+  get obstacles () {
+    return this._obstacles;
+  }
+
+  get agents () {
+    return this._agents;
   }
 }
 

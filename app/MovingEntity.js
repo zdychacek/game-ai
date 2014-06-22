@@ -20,6 +20,7 @@ class MovingEntity extends BaseGameEntity {
     maxTurnRate,
     maxForce
   }) {
+    // call base class constructor
     super({
       entityType: 0,
       vPosition,
